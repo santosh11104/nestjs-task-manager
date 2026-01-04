@@ -1,0 +1,92 @@
+{
+  "info": {
+    "_postman_id": "7f3e8a9c-9c44-4e8f-9a91-2c6d9b2c0c01",
+    "name": "NestJS Task Manager - Phase 1",
+    "description": "Phase 1 Postman collection for NestJS Task Manager API (Dockerized PostgreSQL)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Create Task",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Learn NestJS\",\n  \"description\": \"Phase 1 Task Manager POC\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tasks",
+          "host": ["{{baseUrl}}"],
+          "path": ["tasks"]
+        }
+      }
+    },
+    {
+      "name": "Get All Tasks",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/tasks",
+          "host": ["{{baseUrl}}"],
+          "path": ["tasks"]
+        }
+      }
+    },
+    {
+      "name": "Get Task By ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/tasks/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["tasks", "1"]
+        }
+      }
+    },
+    {
+      "name": "Delete Task",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/tasks/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["tasks", "1"]
+        }
+      }
+    },
+    {
+      "name": "Validation Test (Invalid Payload)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"\",\n  \"randomField\": \"should fail\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tasks",
+          "host": ["{{baseUrl}}"],
+          "path": ["tasks"]
+        }
+      }
+    }
+  ]
+}
