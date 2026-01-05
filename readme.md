@@ -413,3 +413,102 @@ Phase 2 focused on making the application **safe, predictable, and production-re
 Backend / Blockchain Engineer  
 Exploring NestJS with enterprise-grade practices
 
+
+---
+
+## 🔵 Phase 3 — Containers & CI/CD (Up to CI)
+
+Phase 3 focuses on making the application **deployable and verifiable in an automated way**. Up to this stage, the goal is **containerization and continuous integration**, not deployment.
+
+---
+
+### 🧱 Step 3.1 — Dockerize the NestJS API
+
+The NestJS application is packaged as a **Docker image** using a **multi-stage Dockerfile**.
+
+**Why multi-stage build?**
+- Keeps the final image small
+- Separates build-time and runtime dependencies
+- Matches real production practices
+
+**What the Dockerfile does:**
+- Builds the NestJS app (`npm run build`)
+- Copies only compiled output and production dependencies
+- Starts the app using `node dist/main.js`
+
+This ensures the API can run consistently across environments.
+
+---
+
+### 🧱 Step 3.2 — Docker Compose (API + PostgreSQL)
+
+Running the API container alone is not sufficient, because containers cannot access other services via `localhost`.
+
+Docker Compose is used to:
+- Run **API and PostgreSQL together**
+- Attach both containers to the same Docker network
+- Allow the API to connect to Postgres using the service name `postgres`
+
+**Key concepts learned:**
+- Containers do not use `localhost` to talk to each other
+- Docker service names act as DNS hostnames
+- Environment variables must be reloaded by recreating containers
+
+The application now runs with a single command:
+
+```bash
+docker compose up -d --build
+```
+
+---
+
+### 🧱 Step 3.3 — Continuous Integration (GitHub Actions)
+
+A **GitHub Actions CI pipeline** is added to automatically verify the application on every push or pull request to `main`.
+
+The CI pipeline performs the following steps:
+
+1. Checkout repository
+2. Setup Node.js (v18)
+3. Install dependencies using `npm ci`
+4. Build the NestJS application
+5. Build the Docker image
+
+If any step fails, the pipeline fails — preventing broken builds from reaching `main`.
+
+**CI workflow location:**
+
+```
+.github/workflows/ci.yml
+```
+
+This ensures:
+- Reproducible builds
+- Early failure detection
+- CI parity with production Docker builds
+
+---
+
+## 🏁 Current Project Status
+
+- ✅ Phase 1: Core architecture & database setup
+- ✅ Phase 2: Validation, PATCH APIs & configuration
+- ✅ Phase 3 (partial): Dockerization & CI pipeline
+- ⏭ Phase 3 (next): Deployment strategy & release flow
+
+---
+
+## 🧠 Key Takeaways So Far
+
+- Clean modular NestJS architecture
+- Repository pattern using TypeORM
+- DTO-based runtime validation
+- Environment-driven configuration
+- Production-grade Docker images
+- Container networking fundamentals
+- Automated CI verification with GitHub Actions
+
+---
+
+At this stage, the application is **buildable, containerized, and continuously verified**, which is the foundation required for safe production deployments.
+
