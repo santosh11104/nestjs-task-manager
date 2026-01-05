@@ -1,10 +1,15 @@
 import { Controller, Get, Post, Delete, Param, Body } from '@nestjs/common';
 import { TasksService } from './tasks.service';
+import { CreateTaskDto } from './dto/create-task.dto';
+import { Patch } from '@nestjs/common';
+import { UpdateTaskDto } from './dto/update-task.dto';
+
+
 import { Task } from './task.entity';
 
 @Controller('tasks')
 export class TasksController {
-  constructor(private readonly tasksService: TasksService) {}
+  constructor(private readonly tasksService: TasksService) { }
 
   @Get()
   getAll(): Promise<Task[]> {
@@ -17,12 +22,21 @@ export class TasksController {
   }
 
   @Post()
-  create(@Body() task: Partial<Task>): Promise<Task> {
-    return this.tasksService.create(task);
+  create(@Body() dto: CreateTaskDto): Promise<Task> {
+    return this.tasksService.create(dto);
   }
 
   @Delete(':id')
   delete(@Param('id') id: string): Promise<void> {
     return this.tasksService.remove(Number(id));
   }
+
+  @Patch(':id')
+  update(
+    @Param('id') id: number,
+    @Body() dto: UpdateTaskDto,
+  ): Promise<Task> {
+    return this.tasksService.update(id, dto);
+  }
+
 }

@@ -357,15 +357,53 @@ Expected output:
 
 ---
 
+## 🟢 Phase 2 Completed
+
+Phase 2 focused on making the application **safe, predictable, and production-ready**.
+
+### What was added in Phase 2
+
+- **Global Validation Pipes**
+  - Enabled `ValidationPipe` to validate all incoming requests
+  - Invalid requests now fail early with proper `400 Bad Request`
+
+- **DTO-driven Validation**
+  - `CreateTaskDto` enforces required fields using `@IsDefined` and `@IsNotEmpty`
+  - `UpdateTaskDto` supports partial updates using `@IsOptional`
+
+- **PATCH Endpoint**
+  - Added `PATCH /tasks/:id` for partial updates
+  - Correct REST semantics implemented
+
+- **Environment-based Configuration**
+  - Integrated `ConfigModule`
+  - Database credentials moved to `.env`
+  - No secrets hardcoded in source code
+
+- **Updated Tooling & Documentation**
+  - Phase 2 Postman collection added
+  - README updated to reflect validation, PATCH, and config changes
+
+---
+
+## 🧠 Key Technical Learnings
+
+- Repository pattern via TypeORM
+- Difference between compile-time types and runtime validation
+- Proper use of `async` / `await` (only when needed)
+- DTOs as API contracts
+- Validation as the first line of defense (before DB constraints)
+
+---
+
 ## ⏸ Current Status
 
-- ✅ Phase 1 completed
-- ⏸ Global validation pipes intentionally **not enabled**
-- ⏭ Phase 2 will add:
-  - Validation pipes
-  - PATCH endpoint
-  - Environment-based config
-  - Migrations
+- ✅ Phase 1 completed (core architecture & infrastructure)
+- ✅ Phase 2 completed (validation, update APIs, config)
+- ⏭ Phase 3 will focus on:
+  - Dockerizing the NestJS API
+  - CI/CD pipeline using GitHub Actions
+  - Production deployment strategy
 
 ---
 

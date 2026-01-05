@@ -8,23 +8,23 @@ export class TasksService {
   constructor(
     @InjectRepository(Task)
     private taskRepository: Repository<Task>,
-  ) {}
+  ) { }
 
   findAll(): Promise<Task[]> {
     return this.taskRepository.find();
   }
 
   async findOne(id: number): Promise<Task> {
-  const task = await this.taskRepository.findOne({
-    where: { id },
-  });
+    const task = await this.taskRepository.findOne({
+      where: { id },
+    });
 
-  if (!task) {
-    throw new NotFoundException(`Task with id ${id} not found`);
+    if (!task) {
+      throw new NotFoundException(`Task with id ${id} not found`);
+    }
+
+    return task;
   }
-
-  return task;
-}
 
 
   create(task: Partial<Task>): Promise<Task> {
@@ -35,4 +35,12 @@ export class TasksService {
   async remove(id: number): Promise<void> {
     await this.taskRepository.delete(id);
   }
+  async update(id: number, data: Partial<Task>): Promise<Task> {
+    const task = await this.findOne(id); // reuses 404 logic
+
+    Object.assign(task, data);
+
+    return this.taskRepository.save(task);
+  }
+
 }

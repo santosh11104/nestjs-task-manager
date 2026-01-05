@@ -1,8 +1,8 @@
 {
   "info": {
-    "_postman_id": "7f3e8a9c-9c44-4e8f-9a91-2c6d9b2c0c01",
-    "name": "NestJS Task Manager - Phase 1",
-    "description": "Phase 1 Postman collection for NestJS Task Manager API (Dockerized PostgreSQL)",
+    "_postman_id": "c4d9a3e1-8b42-4f4b-bb3d-92b3b1f43a02",
+    "name": "NestJS Task Manager - Phase 2",
+    "description": "Phase 2 Postman collection: Validation, PATCH update, env-based config",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -14,7 +14,7 @@
   ],
   "item": [
     {
-      "name": "Create Task",
+      "name": "Create Task (Valid)",
       "request": {
         "method": "POST",
         "header": [
@@ -25,7 +25,28 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"title\": \"Learn NestJS\",\n  \"description\": \"Phase 1 Task Manager POC\"\n}"
+          "raw": "{\n  \"title\": \"Learn NestJS\",\n  \"description\": \"Phase 2 validation and update\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tasks",
+          "host": ["{{baseUrl}}"],
+          "path": ["tasks"]
+        }
+      }
+    },
+    {
+      "name": "Create Task (Invalid - Missing description)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"\"\n}"
         },
         "url": {
           "raw": "{{baseUrl}}/tasks",
@@ -46,9 +67,40 @@
       }
     },
     {
-      "name": "Get Task By ID",
+      "name": "PATCH Task (Update completed)",
       "request": {
-        "method": "GET",
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"completed\": true\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tasks/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["tasks", "1"]
+        }
+      }
+    },
+    {
+      "name": "PATCH Task (Invalid - Empty title)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"\"\n}"
+        },
         "url": {
           "raw": "{{baseUrl}}/tasks/1",
           "host": ["{{baseUrl}}"],
@@ -64,27 +116,6 @@
           "raw": "{{baseUrl}}/tasks/1",
           "host": ["{{baseUrl}}"],
           "path": ["tasks", "1"]
-        }
-      }
-    },
-    {
-      "name": "Validation Test (Invalid Payload)",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"title\": \"\",\n  \"randomField\": \"should fail\"\n}"
-        },
-        "url": {
-          "raw": "{{baseUrl}}/tasks",
-          "host": ["{{baseUrl}}"],
-          "path": ["tasks"]
         }
       }
     }
