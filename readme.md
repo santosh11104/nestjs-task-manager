@@ -512,3 +512,87 @@ This ensures:
 
 At this stage, the application is **buildable, containerized, and continuously verified**, which is the foundation required for safe production deployments.
 
+
+---
+
+## 🏢 Phase 5 — Enterprise Hardening
+
+Phase 5 focuses on **operability and observability**, which are critical for running backend services in production.
+
+---
+
+### 🔹 Health Checks
+
+A health endpoint is exposed to allow platforms and operators to verify application readiness.
+
+**Endpoint:**
+```
+GET /health
+```
+
+**What it checks:**
+- Application process is running
+- Database connectivity via TypeORM
+
+**Sample healthy response:**
+```json
+{
+  "status": "ok",
+  "info": {
+    "database": {
+      "status": "up"
+    }
+  }
+}
+```
+
+This endpoint is used by container platforms, load balancers, and monitoring systems.
+
+---
+
+### 🔹 Structured Logging
+
+The application uses structured, JSON-based logging suitable for centralized log systems.
+
+**Logging characteristics:**
+- Timestamped log entries
+- Log levels (log, warn, error)
+- Context-aware messages
+
+Structured logs make it easier to:
+- Debug production issues
+- Correlate events
+- Feed logs into systems like ELK or OpenSearch
+
+---
+
+### 🔹 Metrics
+
+Basic application metrics are exposed for monitoring and alerting.
+
+**Metrics endpoint:**
+```
+GET /metrics
+```
+
+Metrics are exposed in **Prometheus-compatible format**, enabling:
+- Performance monitoring
+- Alerting
+- Capacity planning
+
+This prepares the application for integration with monitoring stacks such as Prometheus + Grafana.
+
+---
+
+## 🏁 Project Maturity Status
+
+- ✅ Modular NestJS architecture
+- ✅ Dockerized API and database
+- ✅ CI pipeline (build + image verification)
+- ✅ Safe DB migrations
+- ✅ Health checks
+- ✅ Structured logging
+- ✅ Metrics exposure
+
+At this stage, the project demonstrates **enterprise-grade backend engineering practices**.
+
