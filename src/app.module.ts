@@ -4,6 +4,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TasksModule } from './tasks/tasks.module';
 import { HealthModule } from './health/health.module';
 import { MetricsModule } from './metrics/metrics.module';
+import { ThrottlerModule } from '@nestjs/throttler';
+
 
 @Module({
   imports: [
@@ -32,6 +34,15 @@ import { MetricsModule } from './metrics/metrics.module';
         retryDelay: 3000,
       }),
     }),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 60,
+          limit: 100,
+        },
+      ],
+    }),
+
 
     TasksModule,
     HealthModule,
