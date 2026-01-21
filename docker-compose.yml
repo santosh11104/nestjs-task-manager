@@ -3,32 +3,20 @@ version: "3.9"
 services:
   postgres:
     image: postgres:16
-    container_name: task_postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: taskdb
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5438:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d taskdb"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
 
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: nestjs-task-manager:latest
-    container_name: task_api
+    build: .
     depends_on:
-      postgres:
-        condition: service_healthy
-    env_file:
-      - .env
+      - postgres
+    environment:
+      ENV_PATH: .env.local
+    command: ["/usr/local/bin/entrypoint.sh"]
     ports:
       - "3000:3000"
 

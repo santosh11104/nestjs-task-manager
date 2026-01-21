@@ -5,19 +5,25 @@ import { TasksModule } from './tasks/tasks.module';
 import { HealthModule } from './health/health.module';
 import { MetricsModule } from './metrics/metrics.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
-
+/**
+ * Root application module that configures and imports all feature modules
+ * Handles database connection, configuration management, rate limiting, and module orchestration
+ */
 @Module({
   imports: [
+    // Global configuration module for environment variables
     ConfigModule.forRoot({
-      isGlobal: true,
+      isGlobal: true, // Makes ConfigService available throughout the app
       envFilePath: [
-        '.env.local',
-        '.env',
+        '.env.local',  // Local development overrides
+        '.env',        // Default environment file
       ],
     }),
 
-
+    // Database connection configuration using TypeORM
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -28,25 +34,29 @@ import { ThrottlerModule } from '@nestjs/throttler';
         username: config.get<string>('DB_USERNAME'),
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_NAME'),
-        autoLoadEntities: true,
-        synchronize: false, // set to false in production
-        retryAttempts: 10,
-        retryDelay: 3000,
+        autoLoadEntities: true,  // Automatically load entity files
+        synchronize: false,      // Disabled for production safety - use migrations instead
+        retryAttempts: 10,       // Database connection retry attempts
+        retryDelay: 3000,        // Delay between retry attempts (ms)
       }),
     }),
+    
+    // Rate limiting configuration to prevent abuse
     ThrottlerModule.forRoot({
       throttlers: [
         {
-          ttl: 60,
-          limit: 100,
+          ttl: 60,    // Time window in seconds
+          limit: 100, // Maximum requests per time window
         },
       ],
     }),
 
-
-    TasksModule,
-    HealthModule,
-    MetricsModule,
+    // Feature modules
+    TasksModule,    // Task management functionality
+    HealthModule,   // Health check endpoints
+    MetricsModule,  // Application metrics and monitoring
+    AuthModule,     // Authentication and authorization
+    UsersModule,    // User management
   ],
 })
 export class AppModule { }
